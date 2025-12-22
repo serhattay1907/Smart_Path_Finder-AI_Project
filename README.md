@@ -4,9 +4,6 @@ This project is a web-based pathfinding application that calculates the **shorte
 
 Powered by **Dijkstra's Algorithm** on the backend and **Leaflet.js** on the frontend. 🚀
 
-![Project Screenshot](<img width="1161" height="847" alt="image" src="https://github.com/user-attachments/assets/e15bc458-8336-4522-9dad-f24de263ec67" />
-)
-
 ## 🌟 Features
 
 * **Shortest Path Calculation:** Implements Dijkstra's algorithm to find the optimal route between nodes.
