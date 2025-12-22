@@ -1,0 +1,71 @@
+{
+  "nodes": ["Atatürk Anıtı", "Stadyum", "Starbucks", "Kurşunlu Cami", "Arkeoloji Müzesi", "Belediye", 
+  "Hastane", "Kışla Parkı", "Gazi Mustafa Kemal AKM","Otogar", "Muğla", "İzmir", "İstanbul"],
+  "edges": {
+    "Atatürk Anıtı": [
+      {"node": "Starbucks", "weight": 0},
+      {"node": "Kurşunlu Cami", "weight": 0},
+      {"node": "Stadyum", "weight": 0},
+      {"node": "Arkeoloji Müzesi", "weight": 0},
+      {"node": "Belediye", "weight": 0}
+    ],
+    "Stadyum": [
+      {"node": "Otogar", "weight": 0},
+      {"node": "Atatürk Anıtı", "weight": 0}
+    ],
+    "Starbucks": [
+      {"node": "Atatürk Anıtı", "weight": 0}
+    ],
+    "Kurşunlu Cami": [
+      {"node": "Atatürk Anıtı", "weight": 0}
+    ],
+    "Arkeoloji Müzesi": [
+      {"node": "Atatürk Anıtı", "weight": 0},
+      {"node": "Belediye", "weight": 0}
+    ],
+    "Belediye": [
+        {"node": "Arkeoloji Müzesi", "weight": 0},
+        {"node": "Hastane", "weight": 0}
+    ],
+    "Hastane": [
+      {"node": "Kışla Parkı", "weight": 0},
+      {"node": "Gazi Mustafa Kemal AKM", "weight": 0},
+      {"node": "Belediye", "weight": 0}
+    ],
+    "Kışla Parkı": [
+        {"node": "Hastane", "weight": 0},
+        {"node": "Gazi Mustafa Kemal AKM", "weight": 0}
+    ],
+    "Gazi Mustafa Kemal AKM": [
+        {"node": "Kışla Parkı", "weight": 0},
+        {"node": "Hastane", "weight": 0}
+    ],
+    "Muğla": [
+        {"node": "Belediye", "weight": 0},
+        {"node": "Otogar", "weight": 0},
+        {"node": "İzmir", "weight": 0}
+    ],
+    "İzmir": [
+        {"node": "Muğla", "weight": 0},
+        {"node": "İstanbul", "weight": 0}
+    ],
+
+    "İstanbul" : [
+        {"node": "İzmir", "weight": 0}
+    ]
+  },
+  "coordinates": {
+    "Atatürk Anıtı": [37.215266625165256, 28.36375159085761],
+    "Stadyum": [37.21267518803352, 28.363162898949337],
+    "Starbucks": [37.2181881368005, 28.35837993307943],
+    "Kurşunlu Cami": [37.21697613770769, 28.364590421056178],
+    "Arkeoloji Müzesi": [37.21747542488411, 28.368036943519403],
+    "Belediye": [37.21693658537294, 28.366963344635785],
+    "Hastane": [37.213466366678276, 28.369778158678002],
+    "Kışla Parkı": [37.21327329340972, 28.37466463817861],
+    "Gazi Mustafa Kemal AKM": [37.2113091667114, 28.376809844847635],
+    "Muğla": [37.215736121410536, 28.362824880052692],
+    "İzmir": [38.4215476472037, 27.140256374610253],
+    "İstanbul": [41.02641837916036, 29.169445137674966]
+  }
+}
