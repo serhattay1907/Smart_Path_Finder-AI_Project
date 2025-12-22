@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Muğla Merkez - Smart Path Finder</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f2f5;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            background-color: #2c3e50;
+            color: white;
+            width: 100%;
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        h1 { margin: 0; font-weight: 600; font-size: 1.8rem; }
+
+        .main-container {
+            width: 95%;
+            max-width: 1200px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .panel {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            background-color: #e9ecef;
+            font-weight: bold;
+            color: #495057;
+            width: 180px;
+            pointer-events: none; /* Elle yazmayı engelle */
+        }
+
+        button {
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        button:hover { background-color: #2ecc71; transform: translateY(-2px); }
+        .reset-btn { background-color: #e74c3c; }
+        .reset-btn:hover { background-color: #c0392b; }
+
+        .results-box {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .result-card {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-align: center;
+            min-width: 80px;
+        }
+
+        .result-card strong { display: block; font-size: 1.2rem; color: #2c3e50; }
+        .result-card span { font-size: 0.85rem; color: #6c757d; text-transform: uppercase; letter-spacing: 1px; }
+
+        #map-container {
+            background: white;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            height: 600px; /* Harita yüksekliği kesin verilmeli */
+        }
+
+        #map {
+            height: 100%;
+            width: 100%;
+            border-radius: 8px;
+            cursor: crosshair;
+            z-index: 1;
+        }
+
+        .node-label {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid #333;
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-size: 13px;
+            font-weight: bold;
+            color: #000;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+        
+        .error-msg {
+            background-color: #f8d7da; color: #721c24; padding: 10px;
+            border-radius: 5px; text-align: center; width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Smart Path Finder: Muğla Merkez</h1>
+    </header>
+
+    <div class="main-container">
+        
+        <div class="panel">
+            <form action="/" method="post" class="form-group">
+                <div>
+                    <label style="font-size:0.8rem; display:block; margin-bottom:5px;">Başlangıç</label>
+                    <input type="text" id="start_input" name="start_node" placeholder="Haritadan seçin" value="{{ s_start }}" required readonly>
+                </div>
+                
+                <div style="font-size:1.5rem; color:#aaa;">➝</div>
+
+                <div>
+                    <label style="font-size:0.8rem; display:block; margin-bottom:5px;">Hedef</label>
+                    <input type="text" id="end_input" name="end_node" placeholder="Haritadan seçin" value="{{ s_end }}" required readonly>
+                </div>
+
+                <div style="margin-top: 5px;">
+                    <button type="submit">Rotayı Çiz</button>
+                    <button type="button" class="reset-btn" onclick="window.location.href='/'">Temizle</button>
+                </div>
+            </form>
+
+            {% if path %}
+            <div class="results-box">
+                <div class="result-card">
+                    <strong>{{ distance }} m</strong>
+                    <span>Mesafe</span>
+                </div>
+                <div class="result-card">
+                    <strong>~{{ time }} dk</strong>
+                    <span>Süre</span>
+                </div>
+                <div class="result-card">
+                    <strong>{{ steps }}</strong>
+                    <span>Adım</span>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        {% if error %}
+            <div class="error-msg">{{ error }}</div>
+        {% endif %}
+
+        <div id="map-container">
+            <div id="map"></div>
+        </div>
+
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    
+    <script>
+        // Python'dan gelen verileri al
+        var nodes = JSON.parse('{{ nodes | tojson | safe }}');
+        var path = JSON.parse('{{ path | tojson | safe }}' || 'null');
+
+        // Haritayı Başlat (Muğla Merkez Koordinatları)
+        var map = L.map('map').setView([37.21530878688118, 28.363719614751343], 15);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Seçim mantığı
+        var selectionStep = 1;
+
+        function handleMapClick(nodeName) {
+            var startInput = document.getElementById('start_input');
+            var endInput = document.getElementById('end_input');
+
+            if (selectionStep === 1) {
+                startInput.value = nodeName;
+                endInput.value = ""; 
+                selectionStep = 2;
+            } else {
+                endInput.value = nodeName;
+                selectionStep = 1;
+            }
+        }
+
+        // Noktaları Ekle
+        for (var nodeName in nodes) {
+            var lat = nodes[nodeName].lat;
+            var lon = nodes[nodeName].lon;
+
+            if (lat && lon) {
+                var marker = L.marker([lat, lon]).addTo(map);
+
+                marker.bindTooltip(nodeName, {
+                    permanent: true,
+                    direction: 'top',
+                    className: 'node-label'
+                });
+
+                marker.on('click', function(e) {
+                    var clickedName = this.getTooltip().getContent();
+                    handleMapClick(clickedName);
+                });
+            }
+        }
+
+        // Yolu Çiz
+        if (path && path.length > 0) {
+            var pathCoords = [];
+            for (var i = 0; i < path.length; i++) {
+                var pName = path[i];
+                if (nodes[pName]) {
+                    pathCoords.push([nodes[pName].lat, nodes[pName].lon]);
+                }
+            }
+
+            if (pathCoords.length > 0) {
+                var polyline = L.polyline(pathCoords, {
+                    color: '#e74c3c', 
+                    weight: 6,
+                    opacity: 0.8,
+                    dashArray: '10, 10', 
+                    lineCap: 'round'
+                }).addTo(map);
+
+                map.fitBounds(polyline.getBounds(), {padding: [50, 50]});
+            }
+        }
+    </script>
+</body>
+</html>
