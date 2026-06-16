@@ -1,4 +1,4 @@
-# 📍 Smart Path Finder: Muğla Center
+# 📍 Smart Path Finder:
 
 This project is a web-based pathfinding application that calculates the **shortest and most efficient route** between key locations in Muğla Center. It provides real-time navigation data, including total distance, estimated walking time, and step count.
 
