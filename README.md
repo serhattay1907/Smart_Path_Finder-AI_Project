@@ -26,8 +26,8 @@ Follow these steps to run the project locally:
 
 1.  **Clone the repository:**
     ```bash
-    git clone [https://github.com/yourusername/smart-path-finder-mugla.git](https://github.com/yourusername/smart-path-finder-mugla.git)
-    cd smart-path-finder-mugla
+    git clone https://github.com/serhattay1907/Smart_Path_Finder-AI_Project.git
+    cd Smart_Path_Finder-AI_Project
     ```
 
 2.  **Install dependencies:**
@@ -51,14 +51,11 @@ Follow these steps to run the project locally:
 ├── graph-data.json     # Nodes, edges, and coordinate data
 ├── index.html          # Main frontend interface & map logic
 ├── style.css           # Styling files
-├── script.js           # External scripts (if applicable)
+├── script.js           # Map interaction & API calls
 └── README.md           # Project documentation
 
-🤝 Contributing
-Contributions are welcome! If you have suggestions or want to add new locations to the map, feel free to open a Pull Request.
+```
 
-👤 Author
-SERHAT TAY
+## 👤 Author
+Serhat Tay
 
-📝 License
-This project is open-source and available for educational purposes.
